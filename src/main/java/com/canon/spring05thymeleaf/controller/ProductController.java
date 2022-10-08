@@ -5,6 +5,8 @@ import com.canon.spring05thymeleaf.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ProductController {
@@ -30,5 +32,13 @@ public class ProductController {
 
         return "/product/create-product";
     }
+
+    @PostMapping("/create-product")
+    public String createProduct(@ModelAttribute("product")Product product){
+        productService.productCreate(product);
+
+        return "redirect:/list";
+    }
+
 
 }

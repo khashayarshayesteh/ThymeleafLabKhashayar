@@ -20,10 +20,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+
     @Override
-    public boolean productCreate(Product product){
-        // todo implement method
-        return true;
+    public boolean productCreate(Product product) {
+        return productRepository.save(product);
+
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findProductById(UUID uuid){
+    public Product findProductById(UUID uuid) {
         // todo implement method
         return new Product();
     }
