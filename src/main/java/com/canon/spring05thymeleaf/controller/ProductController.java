@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class ProductController {
 
-
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -19,26 +18,21 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String retrieveAllList(Model model){
+    public String retrieveAllList(Model model) {
+
         model.addAttribute("productList", productService.listProduct());
-
-
         return "product/list";
     }
 
     @GetMapping("/create-form")
-    public String createProductForm(Model model){
-        model.addAttribute("product",new Product());
-
+    public String getCreateProductForm(Model model) {
+        model.addAttribute("product", new Product());
         return "/product/create-product";
     }
 
     @PostMapping("/create-product")
-    public String createProduct(@ModelAttribute("product")Product product){
+    public String createProduct(@ModelAttribute("product") Product product) {
         productService.productCreate(product);
-
         return "redirect:/list";
     }
-
-
 }

@@ -1,9 +1,8 @@
 package com.canon.spring05thymeleaf.service.impl;
 
 import com.canon.spring05thymeleaf.model.Cart;
-import com.canon.spring05thymeleaf.service.CartService;
-import com.canon.spring05thymeleaf.service.ProductService;
-import com.canon.spring05thymeleaf.model.Cart;
+import com.canon.spring05thymeleaf.model.CartItem;
+import com.canon.spring05thymeleaf.model.Product;
 import com.canon.spring05thymeleaf.service.CartService;
 import com.canon.spring05thymeleaf.service.ProductService;
 import org.springframework.stereotype.Service;
@@ -24,17 +23,27 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart addToCart(UUID productId, Integer quantity){
-        //todo retrieve product from repository method
+        Product product = productService.findProductById(productId);
 
-        //todo initialise cart item
-        //todo calculate cart total amount
-        //todo add to cart
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+        cartItem.setTotalAmount(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+
+        CART.getCartItemList().add(cartItem);
+        CART.setCartTotalAmount(CART.getCartTotalAmount().add(cartItem.getTotalAmount()));
+
         return CART;
     }
 
     @Override
     public boolean deleteFromCart(UUID productId){
-        //todo delete product object from cart using stream
-        return true;
+        CartItem itemToDelete = CART.getCartItemList().stream()
+                .filter(cartItem -> cartItem.getProduct().getId().toString().equals(productId.toString()))
+                .findFirst().orElseThrow();
+
+        CART.setCartTotalAmount(CART.getCartTotalAmount().subtract(itemToDelete.getTotalAmount()));
+
+        return CART.getCartItemList().remove(itemToDelete);
     }
 }
